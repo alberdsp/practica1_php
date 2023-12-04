@@ -27,3 +27,12 @@
     border: 1px solid;
 
 }
+
+.form {
+    flex-direction: row;
+    margin: 20px;
+    width: 600px;
+    padding: 1px;
+    border: 1px solid;
+
+}

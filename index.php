@@ -8,14 +8,44 @@
 </head>
 
 <body>
+
   <?php
   /**
    * ABF 2023 declaramos las variables
    */
 
-  $columnas = 5;
-  $filas = 7;
+  $columnas = 2;
+  $filas = 2;
+
+
+  // capturamos del array post y establecemos mímino 2x2
+
+  if (isset($_POST['filas'])) {
+    $filas = $_POST['filas'];
+    if ($filas < 2) {
+      $filas = 2;
+    }
+  }
+
+  if (isset($_POST['columnas'])) {
+    $columnas = $_POST['columnas'];
+    if ($columnas < 2) {
+      $columnas = 2;
+    }
+  }
+
   ?>
+
+
+  <form class="form" action="index.php" method="post">
+
+    <label for="Filas">Filas:</label>
+    <input type="number" id="filas" name="filas" value="<?php echo $filas; ?>">
+    <label for="Columnas">Columnas:</label>
+    <input type="number" id="columnas" name="columnas" value="<?php echo $columnas; ?>">
+
+    <input type="submit" value="  Enviar  ">
+  </form>
 
 
   <table class="table">
