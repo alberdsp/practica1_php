@@ -7,92 +7,89 @@
   <meta charset="UTF-8">
 </head>
 
-<body>
+<h1 class="descrip">Práctica 1.3 DI</h1>
+<h2 class="descrip">Listado de alumnos</h2>
+
+<table class="table">
+
+
 
   <?php
-  /**
+  /*
    * ABF 2023 declaramos las variables
    */
 
-  $columnas = 2;
-  $filas = 2;
+  $servername = "localhost:3307";
+  $username = "root";
+  $password = "sauber";
+  $dbname = "universidad";
 
-
-  // capturamos del array post y establecemos mímino 2x2
-
-  if (isset($_POST['filas'])) {
-    $filas = $_POST['filas'];
-    if ($filas < 2) {
-      $filas = 2;
-    }
+  try {
+    $con = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    // set the PDO error mode to exception
+    $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // echo "Conexión a la base de datos correcta"."<br>";
+  } catch (PDOException $e) {
+    echo "Conexión erronea: " . $e->getMessage() . "<br>";
   }
 
-  if (isset($_POST['columnas'])) {
-    $columnas = $_POST['columnas'];
-    if ($columnas < 2) {
-      $columnas = 2;
-    }
-  }
-
+  $stmt = $con->prepare('SELECT   DNI,APELLIDO_1,APELLIDO_2,NOMBRE,DIRECCION,
+LOCALIDAD,PROVINCIA,FECHA_NACIMIENTO FROM alumno ');
   ?>
 
+  <thead>
 
-  <form class="form" action="index.php" method="post">
+    <tr>
+      <th>DNI</th>
+      <th>Apellido 1</th>
+      <th>Apellido 2</th>
+      <th>Nombre</th>
+      <th>Dirección</th>
+      <th>Localidad</th>
+      <th>Provincia</th>
+      <th>Fecha de Nacimiento</th> <br>
+    </tr>
 
-    <label for="Filas">Filas:</label>
-    <input type="number" id="filas" name="filas" value="<?php echo $filas; ?>">
-    <label for="Columnas">Columnas:</label>
-    <input type="number" id="columnas" name="columnas" value="<?php echo $columnas; ?>">
-
-    <input type="submit" value="  Enviar  ">
-  </form>
+  </thead>
 
 
-  <table class="table">
 
-    <thead>
+  <body>
 
-      <tr>
-        <?php
-        /**
-         * creamos bucle para crear la cabecera
-         */
-        for ($i = 0; $i < $columnas; $i++) {
-          echo "<th> Campo " . ($i + 1) . "</th>";
+    <?php
+    try {
+      // Executamos el statement
+      $stmt->execute();
+
+      // Hacemos Fetch a todos los registros
+      $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      // Recorremos el resultado y creamos las filas
+      if ($resultado) {
+        foreach ($resultado as $lista) {
+
+          // rellenamos cada fila con los datos
+          echo '<tr class= "celda">';
+          echo '<td class= "celda" >' . $lista['DNI'] . "</td>";
+          echo '<td class= "celda" >' . $lista['APELLIDO_1'] . "</td>";
+          echo '<td class= "celda" >' . $lista['APELLIDO_2'] . "</td>";
+          echo '<td class= "celda" >' . $lista['NOMBRE'] . "</td>";
+          echo '<td class= "celda" >' . $lista['DIRECCION'] . "</td>";
+          echo '<td class= "celda" >' . $lista['LOCALIDAD'] . "</td>";
+          echo '<td class= "celda" >' . $lista['PROVINCIA'] . "</td>";
+          echo '<td class= "celda" >' . $lista['FECHA_NACIMIENTO'] . "</td>";
+          echo "</tr>";
         }
-
-        ?>
-      </tr>
-
-
-    </thead>
-
-    <tbody>
-
-      <?php
-      /**
-       * creamos bucle para crear columnas y las filas
-       */
-      for ($i = 0; $i < $filas; $i++) {
-        // creamos las  filas  
-        echo "<tr>";
-        // creamos las  columnas por cada fila
-        for ($e = 0; $e < $columnas; $e++) {
-
-          echo '<td class="celda"> Fila ' . ($i + 1) . " Columna " . ($e + 1) . " </td>";
-        }
-
-
-        echo "</tr>";
+      } else {
+        echo "No records found.";
       }
+    } catch (PDOException $e) {
+      echo "Error: " . $e->getMessage();
+    }
 
-      ?>
+    ?>
 
-    </tbody>
-
-
-  </table>
-
+</table>
 
 
 </body>

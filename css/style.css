@@ -15,9 +15,21 @@
 
 /* estructura de la web*/
 
+.titulo {
+    margin: 20px;
+    border: 1px solid;
+
+}
+
+/* descripción de la tabla*/
+.descrip {
+    margin-top: 20px;
+    margin-left: 20px;
+    text-align:left;
+}
 
 .table {
-    margin: 20px;
+    margin-left: 20px;
     border: 1px solid;
 
 }
@@ -27,6 +39,15 @@
     border: 1px solid;
 
 }
+
+/* titulos tabla*/
+
+.cabetab {
+    font-size: large;
+    font-weight: bold;
+
+}
+
 
 .form {
     flex-direction: row;
