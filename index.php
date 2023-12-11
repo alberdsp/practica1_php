@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html>
 
@@ -8,6 +5,11 @@
   <meta charset="UTF-8">
   <title>Práctica 1.4 php</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    function clearForm() {
+      document.getElementById("filtroForm").reset();
+    }
+  </script>
 </head>
 
 <body>
@@ -16,7 +18,7 @@
   <h2 class="descrip">Listado de alumnos</h2>
 
 
-  <form class="form" action="index.php" method="post">
+  <form id='filtroForm' class="form" action="index.php" method="post">
     <label for="dni">Dni:</label>
     <input type="text" id="dni" name="dni">
 
@@ -30,6 +32,7 @@
     <input type="date" id="fechanacimiento" name="fechanacimiento">
 
     <input type="submit" value="Buscar">
+    <input type="button" value="Limpiar" onclick="clearForm()">
   </form>
 
   <table class="table">
@@ -48,13 +51,17 @@
     <tbody>
       <?php
 
-// Inicializamos las variables
-$dni = '';
-$nombre = '';
-$localidad = '';
-$fechanacimiento = '';
-$sqlfiltro= '';
-$params = [];
+
+      // ABF 2023 
+
+
+      // Inicializamos las variables
+      $dni = '';
+      $nombre = '';
+      $localidad = '';
+      $fechanacimiento = '';
+      $sqlfiltro = '';
+      $params = [];
 
 
 
@@ -72,7 +79,7 @@ $params = [];
         $params = [];
         // comenzamos a cargar los parámetros de la consulta
         if (!empty($_POST['dni'])) {
-          $dni=$_POST['dni'];
+          $dni = $_POST['dni'];
           $sqlfiltro .= ' AND dni = ?';
           $params[] = $dni;
         }
@@ -113,7 +120,7 @@ $params = [];
             echo "</tr>";
           }
         } else {
-          echo "<tr><td colspan='8'>No records found.</td></tr>";
+          echo "<tr><td colspan='8'>No se han encontrado registros.</td></tr>";
         }
       } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
