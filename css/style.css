@@ -57,3 +57,12 @@
     border: 1px solid;
 
 }
+
+.paginacion {
+    flex-direction: row;
+    margin: 20px;
+    width: 1000px;
+    padding: 1px;
+    
+
+}

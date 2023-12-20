@@ -9,7 +9,7 @@
 
 // Inicializamos las variables
 
-use function PHPSTORM_META\sql_injection_subst;
+
 
 $dni = '';
 $nombre = '';
@@ -20,8 +20,9 @@ $params = [];
 $lineas_pagina = "15";
 $primera = "";
 $anterior = "";
-$num_paginas = 1;
+$total_paginas = 1;
 $valor_inicial_limit = 0;
+$valor_final_limit = 15;
 $pagina_seleccionada = 1;
 $pagina_actual = 1;
 
@@ -41,7 +42,7 @@ if (isset($_POST['fechanacimiento'])) {
 }
 
 if (isset($_POST['lineas_pagina'])) {
-  $lineas_pagina= $_POST['lineas_pagina'];
+  $lineas_pagina = $_POST['lineas_pagina'];
 }
 //camputamos valor_inicial_limit si no viene, seria 0
 if (isset($_POST['valor_inicial_limit'])) {
@@ -90,6 +91,8 @@ $dbname = "universidad";
 
     <input type="submit" value="Buscar">
     <input type="button" value="Limpiar" onclick="clearForm()">
+
+    <input type="hidden" name="lineas_pagina" value="<?php echo htmlspecialchars($lineas_pagina); ?>" />
   </form>
 
   <table class="table">
@@ -106,17 +109,20 @@ $dbname = "universidad";
       </tr>
     </thead>
     <tbody>
-    
 
-<?php
+
+      <?php
+
+
+      //  realizamos la conexión con el try y ejecutamos los filtros y la paginación si existen
 
       try {
         $con = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    
-          $sqlfiltro = 'SELECT DNI, APELLIDO_1, APELLIDO_2, NOMBRE, DIRECCION, LOCALIDAD, PROVINCIA, FECHA_NACIMIENTO  FROM alumno WHERE 1 = 1';          
-          $sqlcount = ' SELECT COUNT(*) as total FROM alumno WHERE 1 = 1';  
+
+        $sqlfiltro = 'SELECT DNI, APELLIDO_1, APELLIDO_2, NOMBRE, DIRECCION, LOCALIDAD, PROVINCIA, FECHA_NACIMIENTO  FROM alumno WHERE 1 = 1';
+        $sqlcount = ' SELECT COUNT(*) as total FROM alumno WHERE 1 = 1';
         // comenzamos a cargar los parámetros de la consulta
         if (!empty($_POST['dni'])) {
           $dni = $_POST['dni'];
@@ -148,14 +154,60 @@ $dbname = "universidad";
 
 
         if (!empty($_POST['lineas_pagina'])) {
-          $lineas_pagina= $_POST['lineas_pagina'];
+          $lineas_pagina = $_POST['lineas_pagina'];
+        }
 
-      }
 
 
-        
-        $sqlfiltro .= " LIMIT $valor_inicial_limit , $lineas_pagina";
-        
+        // Calcular el número total
+        $stmt = $con->prepare($sqlcount);
+        $stmt->execute($params);
+        $total_registros = $stmt->fetchColumn();
+
+        $total_paginas = ceil($total_registros / $lineas_pagina);
+
+        // Calcular el número de páginas 
+        $total_paginas = ceil($total_registros / $lineas_pagina);
+
+        if (isset($_POST['primera'])) {
+          $valor_inicial_limit = 0;
+          $pagina_actual = 1;
+        } elseif (isset($_POST['anterior'])) {
+          $valor_inicial_limit = max(0, $valor_inicial_limit - $lineas_pagina);
+          $pagina_actual--;
+          $pagina_seleccionada = $pagina_actual;
+        } elseif (isset($_POST['siguiente'])) {
+          $pagina_actual++;
+          if ($pagina_actual != $total_paginas) {
+            $valor_inicial_limit = min($total_registros - $lineas_pagina, $valor_inicial_limit + $lineas_pagina);
+          } else {
+            $valor_inicial_limit =  $lineas_pagina * ($total_paginas - 1);
+            $lineas_pagina = $total_registros - $valor_inicial_limit;
+          }
+          $pagina_seleccionada = $pagina_actual;
+          echo "valor del limite incial " . $valor_inicial_limit;
+          echo "valor del limite final " . $lineas_pagina;
+        } elseif (isset($_POST['ultima'])) {
+          $valor_inicial_limit =  $lineas_pagina * ($total_paginas - 1);
+          $lineas_pagina = $total_registros - $valor_inicial_limit;
+          echo "valor del limite incial " . $valor_inicial_limit;
+          echo "valor del limite final " . $lineas_pagina;
+          echo "valor numero de páginas " . $total_paginas;
+          $pagina_actual = $total_paginas;
+          $pagina_seleccionada = $pagina_actual;
+          // TODO  ARREGLAR EL SELECTOR DE PÁGINA
+
+        } elseif (isset($_POST['pagina_seleccionada'])) {
+          $pagina_actual = $_POST['pagina_seleccionada'];
+          $pagina_seleccionada = $_POST['pagina_seleccionada'];
+          $valor_inicial_limit =  $lineas_pagina * $pagina_actual;
+          $valor_final_limit = $lineas_pagina;
+        }
+
+
+
+        $sqlfiltro .= " order by nombre ASC LIMIT $valor_inicial_limit , $lineas_pagina";
+
         $stmt = $con->prepare($sqlfiltro);
         $stmt->execute($params);
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -183,91 +235,52 @@ $dbname = "universidad";
     </tbody>
   </table>
 
-  
+
   <br>
 
 
-  <?php
-
-
-// Calcular el número total
-$stmt = $con->prepare($sqlcount);
-$stmt->execute($params);
-$total_registros = $stmt->fetchColumn();
-
-$total_paginas = ceil($total_registros / $lineas_pagina);
-
-// Calcular el número de páginas 
-$total_paginas = ceil($total_registros / $lineas_pagina);
-if (isset($_POST['primera'])) {
-    $valor_inicial_limit = 0;
-} elseif (isset($_POST['anterior'])) {
-    $valor_inicial_limit = max(0, $valor_inicial_limit - $lineas_pagina);
-} elseif (isset($_POST['siguiente'])) {
-    $valor_inicial_limit = min($total_registros - $lineas_pagina, $valor_inicial_limit + $lineas_pagina);
-} elseif (isset($_POST['ultima'])) {
-    $valor_inicial_limit = max(0, $total_registros - $lineas_pagina);
-}
-
-
-// Calcular la página actual
-
-if (isset($_POST['pagina_actual'])) {
-  $pagina_actual = $_POST['pagina_actual'];
-}
-
-
-?>
-
-
-// TODO   FALTA IMPLEMENTAR EL CAMBIO DE PÁGINA AL PULSAR PRIMERO ETC Y AL SELECCIONAR PÁGINA.
-
-<form method="post" action="index.php">
+  <form class="paginacion" method="post" action="index.php">
 
     <!-- Campos Ocultos para Mantener los Filtros -->
     <input type="hidden" name="dni" value="<?php echo htmlspecialchars($dni); ?>">
     <input type="hidden" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>">
     <input type="hidden" name="localidad" value="<?php echo htmlspecialchars($localidad); ?>">
     <input type="hidden" name="fechanacimiento" value="<?php echo htmlspecialchars($fechanacimiento); ?>">
-   
-  
+    <input type="hidden" name="valor_inicial_limit" value="<?php echo htmlspecialchars($valor_inicial_limit); ?>" />
+    <input type="hidden" name="pagina_actual" value="<?php echo htmlspecialchars($pagina_actual); ?>" />
+    <input type="hidden" name="lineas_pagina" value="<?php echo htmlspecialchars($lineas_pagina); ?>" />
 
-   
 
-    <input type="submit" name="primera" value="<<" />
-    <input type="submit" name="anterior" value="<" />
+
+    <input type="submit" name="primera" value=" << " />
+    <input type="submit" name="anterior" value=" < " />
 
     <!-- Selector de Página -->
     <label for="pagina_seleccionada">Ir a la página:</label>
-  
-    <select name="pagina_seleccionada" onchange="this.form.submit()">
-    <?php
-    // iteramos para calcular el numero de páginas resultante 
-        for ($i = 1; $i <= $total_paginas; $i++) {
-            $selected = ($pagina_seleccionada == $i) ? 'selected' : ''; // usamos operador ternario
-            echo "<option value='$i' $selected>$i</option>";
-        }
-        ?>
-    </select>
 
-    <input type="submit" name="siguiente" value=">" />
-    <input type="submit" name="ultima" value=">>" />
+    <input type="text" name="pagina_seleccionada" value="<?php echo $pagina_seleccionada; ?>" />
+    <input type="submit" value="ir a página">
+
+
+
+
+
+    <input type="submit" name="siguiente" value=" > " />
+    <input type="submit" name="ultima" value=" >> " />
 
     <label for="lineas_pagina">Registros por página:</label>
     <select name="lineas_pagina" onchange="this.form.submit()">
-        <option value="5" <?php if ($lineas_pagina == '5') echo 'selected'; ?>>5</option>
-        <option value="10" <?php if ($lineas_pagina == '10') echo 'selected'; ?>>10</option>
-        <option value="15" <?php if ($lineas_pagina == '15') echo 'selected'; ?>>15</option>
-        <option value="20" <?php if ($lineas_pagina == '20') echo 'selected'; ?>>20</option>
-        <option value="50" <?php if ($lineas_pagina == '50') echo 'selected'; ?>>50</option>
+      <option value="5" <?php if ($lineas_pagina == '5') echo 'selected'; ?>>5</option>
+      <option value="10" <?php if ($lineas_pagina == '10') echo 'selected'; ?>>10</option>
+      <option value="15" <?php if ($lineas_pagina == '15') echo 'selected'; ?>>15</option>
+      <option value="20" <?php if ($lineas_pagina == '20') echo 'selected'; ?>>20</option>
+      <option value="50" <?php if ($lineas_pagina == '50') echo 'selected'; ?>>50</option>
     </select>
-
-    <input type="hidden" name="valor_inicial_limit" value="<?php echo $valor_inicial_limit; ?>" />
 
 
     <!-- Mostrar el Número Total de Registros -->
     <?php
-   
+
     echo "<p>Total de registros: $total_registros</p>";
     ?>
 
@@ -275,7 +288,7 @@ if (isset($_POST['pagina_actual'])) {
     <p>Página <?php echo $pagina_actual ?> de <?php echo $total_paginas ?></p>
 
     <input type="hidden" name="valor_inicial_limit" value="<?php echo $valor_inicial_limit; ?>" />
-</form>
+  </form>
 
   </br>
 
