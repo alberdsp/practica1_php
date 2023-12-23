@@ -5,7 +5,9 @@
 
 // ABF 2023 
 
+// incluimos el fichero aparte de conexión a la BD
 
+require_once('config.php');
 
 // si se ha presionado limpiar, limpiamos formulario primero de todo
 
@@ -34,12 +36,6 @@ $valor_final_limit = 15;
 $pagina_seleccionada = 1;
 $pagina_actual = 1;
 
-
-// Conexión a la bd
-$servername = "localhost:3307";
-$username = "root";
-$password = "sauber";
-$dbname = "universidad";
 
 //  realizamos la conexión con el try y ejecutamos los filtros y la paginación si existen
 
@@ -222,6 +218,9 @@ try {
 
 
   </form>
+ <!-- Añadimos el boton de añadir -->
+
+ <button id= "añadirbutton" onclick="window.location.href='form.php?accion=añadir'">Añadir alumno</button>
 
   <table class="table">
     <thead>
@@ -254,6 +253,7 @@ try {
           echo "<td class='celda'>" . htmlspecialchars($lista['LOCALIDAD']) . "</td>";
           echo "<td class='celda'>" . htmlspecialchars($lista['PROVINCIA']) . "</td>";
           echo "<td class='celda'>" . htmlspecialchars($lista['FECHA_NACIMIENTO']) . "</td>";
+          echo "<td class='celda'><button onclick='editarAlumno(" . $lista['DNI'] . ")'>Editar</button> <button onclick='eliminarAlumno(" . $lista['DNI'] . ")'>Eliminar</button></td>"; // Edit and Delete buttons as buttons
           echo "</tr>";
         }
       } else {
@@ -313,6 +313,29 @@ try {
 
   </br>
 
+   <!-- Lógica para eliminar y borrar -->
+  <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const alumnoForm = document.getElementById("alumnoForm");
+            const veralumnoFormButton = document.getElementById("showalumnoForm");
+
+            // Show the student form when the "Add Student" button is clicked
+            veralumnoFormButton.addEventListener("click", function () {
+                alumnoForm.style.display = "block";
+            });
+        });
+
+        // JavaScript functions to handle Edit and Delete actions
+        function editarAlumno(dni) {
+            // Redirect to edit_student.php with the studentID parameter
+            window.location.href = '  form.php?accion=editar&dni=' + dni;
+        }
+
+        function deleteStudent(studentID) {
+            // Redirect to delete_student.php with the studentID parameter
+            window.location.href = 'delete_student.php?studentID=' + studentID;
+        }
+    </script>
 </body>
 
 </html>
