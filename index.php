@@ -184,7 +184,7 @@ try {
 
 <head>
   <meta charset="UTF-8">
-  <title>Práctica 1.5 php</title>
+  <title>Práctica 1.6 php</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
     function clearForm() {
@@ -195,7 +195,7 @@ try {
 
 <body>
 
-  <h1 class="descrip">Práctica 1.5 DI</h1>
+  <h1 class="descrip">Práctica 1.6 DI</h1>
   <h2 class="descrip">Listado de alumnos</h2>
 
 
@@ -212,15 +212,15 @@ try {
     <label for="fechanacimiento">F. Nacimiento:</label>
     <input type="date" id="fechanacimiento" name="fechanacimiento" value="<?php echo $fechanacimiento ?>">
     <input type="hidden" name="lineas_pagina" value="<?php echo htmlspecialchars($lineas_pagina); ?>" />
-    <input type="submit" value="Buscar">
-    <input type="submit" name="clear" value="Limpiar">
+    <input class="botonbuscar" type="submit" value="Buscar">
+    <input class="botonlimpiar" type="submit" name="clear" value="Limpiar">
 
 
 
   </form>
- <!-- Añadimos el boton de añadir -->
+  <!-- Añadimos el boton de añadir -->
 
- <button id= "añadirbutton" onclick="window.location.href='form.php?accion=añadir'">Añadir alumno</button>
+  <button class="botonmas" onclick="window.location.href='form.php?accion=añadir'">Añadir alumno</button>
 
   <table class="table">
     <thead>
@@ -253,7 +253,7 @@ try {
           echo "<td class='celda'>" . htmlspecialchars($lista['LOCALIDAD']) . "</td>";
           echo "<td class='celda'>" . htmlspecialchars($lista['PROVINCIA']) . "</td>";
           echo "<td class='celda'>" . htmlspecialchars($lista['FECHA_NACIMIENTO']) . "</td>";
-          echo "<td class='celda'><button onclick='editarAlumno(" . $lista['DNI'] . ")'>Editar</button> <button onclick='eliminarAlumno(" . $lista['DNI'] . ")'>Eliminar</button></td>"; // Edit and Delete buttons as buttons
+          echo "<td class='celda'><button class='botoneditar'onclick='editarAlumno(" . $lista['DNI'] . ")'>Editar</button> <button class='botonborrar' onclick='eliminarAlumno(" . $lista['DNI'] . ")'>Eliminar</button></td>";
           echo "</tr>";
         }
       } else {
@@ -278,16 +278,16 @@ try {
     <input type="hidden" name="valor_inicial_limit" value="<?php echo htmlspecialchars($valor_inicial_limit); ?>" />
     <input type="hidden" name="pagina_actual" value="<?php echo htmlspecialchars($pagina_actual); ?>" />
     <input type="hidden" name="lineas_pagina" value="<?php echo htmlspecialchars($lineas_pagina); ?>" />
-    <input type="submit" name="primera" value=" << " />
-    <input type="submit" name="anterior" value=" < " />
+    <input class="botonflecha" type="submit" name="primera" value=" << " />
+    <input class="botonflecha" type="submit" name="anterior" value=" < " />
 
     <!-- Selector de Página -->
     <label for="pagina_seleccionada">Ir a la página:</label>
 
     <input type="text" name="pagina_seleccionada" value="<?php echo $pagina_seleccionada; ?>" />
-    <input type="submit" value="ir a página">
-    <input type="submit" name="siguiente" value=" > " />
-    <input type="submit" name="ultima" value=" >> " />
+    <input class="boton" type="submit" value="ir a página">
+    <input class="botonflecha" type="submit" name="siguiente" value=" > " />
+    <input class="botonflecha" type="submit" name="ultima" value=" >> " />
 
     <label for="lineas_pagina">Registros por página:</label>
     <select name="lineas_pagina" onchange="this.form.submit()">
@@ -299,43 +299,40 @@ try {
     </select>
 
 
-    <!-- Mostrar el Número Total de Registros -->
+    <!-- Mostrar el Número Total de Registros Mostrar Número de Página Actual y Total de Páginas -->
     <?php
 
-    echo "<p>Total de registros: $total_registros</p>";
+    echo "<p>Total de registros: $total_registros  -  Página $pagina_actual  de $total_paginas </p>";
     ?>
-
-    <!-- Mostrar Número de Página Actual y Total de Páginas -->
-    <p>Página <?php echo $pagina_actual ?> de <?php echo $total_paginas ?></p>
-
     <input type="hidden" name="valor_inicial_limit" value="<?php echo $valor_inicial_limit; ?>" />
   </form>
 
   </br>
 
-   <!-- Lógica para eliminar y borrar -->
+  <!-- Lógica para eliminar y borrar -->
   <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const alumnoForm = document.getElementById("alumnoForm");
-            const veralumnoFormButton = document.getElementById("showalumnoForm");
+    document.addEventListener("DOMContentLoaded", function() {
+      const alumnoForm = document.getElementById("alumnoForm");
+      const veralumnoFormButton = document.getElementById("showalumnoForm");
 
-            // Show the student form when the "Add Student" button is clicked
-            veralumnoFormButton.addEventListener("click", function () {
-                alumnoForm.style.display = "block";
-            });
-        });
+      // mostrar formulario añadir 
+      veralumnoFormButton.addEventListener("click", function() {
+        alumnoForm.style.display = "block";
+      });
+    });
 
-        // JavaScript functions to handle Edit and Delete actions
-        function editarAlumno(dni) {
-            // Redirect to edit_student.php with the studentID parameter
-            window.location.href = '  form.php?accion=editar&dni=' + dni;
-        }
+    // función editar 
+    function editarAlumno(dni) {
 
-        function deleteStudent(studentID) {
-            // Redirect to delete_student.php with the studentID parameter
-            window.location.href = 'delete_student.php?studentID=' + studentID;
-        }
-    </script>
+      window.location.href = '  form.php?accion=editar&dni=' + dni;
+    }
+
+    // función borrar
+    function deleteStudent(studentID) {
+
+      window.location.href = 'delete_student.php?studentID=' + studentID;
+    }
+  </script>
 </body>
 
 </html>

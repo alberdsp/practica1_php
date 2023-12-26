@@ -60,8 +60,9 @@ try {
 }
 ?>
 
-<button onclick="window.location.href='index.php'">Volver al listado</button>
 
+
+<div class="divbotonera">
 <?php
     if (isset($_GET['accion'])) {
         $action = $_GET['accion'];
@@ -73,9 +74,15 @@ try {
     }
    
 ?>
+</div>
 
-<div id="alumnoForm">
-    <h2>Información del Alumno</h2>
+
+<div class="divbotonera">
+ <h2>Información del Alumno</h2>
+ </div>
+
+<div>
+   
     <form id="alumnoInfoForm" method="post" action="form.php">
         <?php if ($editando) : ?>
             <input type="hidden" name="edit" value="<?php echo $_GET['dni']; ?>">
@@ -85,20 +92,24 @@ try {
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>" placeholder="Nombre" required>
         <label for="apellido1">Apellido 1:</label>
-        <input type="text" id="apellido1" name="apellido1" value="<?php echo $apellido1; ?>" placeholder="Apellido 1">
+        <input type="text" id="apellido1" name="apellido1" value="<?php echo $apellido1; ?>" placeholder="Apellido 1" required>
         <label for="apellido2">Apellido 2:</label>
-        <input type="text" id="apellido2" name="apellido2" value="<?php echo $apellido2; ?>" placeholder="Apellido 2">
+        <input type="text" id="apellido2" name="apellido2" value="<?php echo $apellido2; ?>" placeholder="Apellido 2" required>
         <label for="localidad">Localidad:</label>
-        <input type="text" id="localidad" name="localidad" value="<?php echo $localidad; ?>" placeholder="Localidad">
+        <input type="text" id="localidad" name="localidad" value="<?php echo $localidad; ?>" placeholder="Localidad" required>
         <label for="provincia">Provincia:</label>
-        <input type="text" id="provincia" name="provincia" value="<?php echo $provincia; ?>" placeholder="Provincia">
+        <input type="text" id="provincia" name="provincia" value="<?php echo $provincia; ?>" placeholder="Provincia" required>
         <label for="fecha_nacimiento">Fecha Nacimiento:</label>
-        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $fecha_nacimiento; ?>" placeholder="Fecha Nacimiento">
+        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $fecha_nacimiento; ?>" placeholder="Fecha Nacimiento" required>
         <!-- Botón para crear o actualizar -->
-        <button type="submit" name="<?php echo $editando ? 'update' : 'create'; ?>">
+        <button class= "botonbuscar" type="submit" name="<?php echo $editando ? 'update' : 'create'; ?>">
             <?php echo $editando ? 'Actualizar' : 'Añadir'; ?>
         </button>
     </form>
+</div>
+
+<div class="divbotonera">
+<button  class ="botonvolver" onclick="window.location.href='index.php'">Volver al listado</button>
 </div>
 
 </body>
