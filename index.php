@@ -50,6 +50,32 @@ try {
   $sqlcount = ' SELECT COUNT(*) as total FROM alumno WHERE 1 = 1';
 
 
+  // comprobamos si vienen parametros de borrado
+
+  if (isset($_GET['accion']) && isset($_GET['dni'])) {
+    $accion = $_GET['accion'];
+    $dni = $_GET['dni'];
+
+    if ($accion === 'borrar') {
+      // Actualizar consulta para usar una declaración preparada
+      $sql = "delete FROM alumno_asignatura WHERE id_alumno = :dni";
+      $stmt = $con->prepare($sql);
+      $stmt->bindParam(':dni', $dni);
+      $stmt->execute();
+
+      $sql = "delete FROM alumno WHERE dni = :dni";
+      $stmt = $con->prepare($sql);
+      $stmt->bindParam(':dni', $dni);
+      $stmt->execute();
+
+
+      echo "Alumno con DNI $dni borrado ";
+      $dni = "";
+    } else {
+      echo "Acción desconocida";
+    }
+  }
+
   // comenzamos a cargar los parámetros de la consulta
   if (!empty($_POST['dni'])) {
     $dni = $_POST['dni'];
@@ -311,16 +337,6 @@ try {
 
   <!-- Lógica para eliminar y borrar -->
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const alumnoForm = document.getElementById("alumnoForm");
-      const veralumnoFormButton = document.getElementById("showalumnoForm");
-
-      // mostrar formulario añadir 
-      veralumnoFormButton.addEventListener("click", function() {
-        alumnoForm.style.display = "block";
-      });
-    });
-
     // función editar 
     function editarAlumno(dni) {
 
@@ -328,9 +344,9 @@ try {
     }
 
     // función borrar
-    function deleteStudent(studentID) {
+    function eliminarAlumno(dni) {
 
-      window.location.href = 'delete_student.php?studentID=' + studentID;
+      window.location.href = 'index.php?accion=borrar&dni=' + dni;
     }
   </script>
 </body>

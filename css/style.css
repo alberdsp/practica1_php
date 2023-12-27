@@ -25,7 +25,7 @@
 .descrip {
     margin-top: 20px;
     margin-left: 20px;
-    text-align:left;
+    text-align: left;
 }
 
 .table {
@@ -40,7 +40,7 @@
 .celda {
     padding: 1px;
     border: 1px solid;
-   
+
 }
 
 /* titulos tabla*/
@@ -65,8 +65,9 @@ form {
 }
 
 
-input[type="text"], textarea {
-   
+input[type="text"],
+textarea {
+
     padding: 8px;
     margin: 8px 0;
     display: inline-block;
@@ -76,8 +77,9 @@ input[type="text"], textarea {
 }
 
 
-input[type="date"], textarea {
-   
+input[type="date"],
+textarea {
+
     padding: 8px;
     margin: 8px 0;
     border: 1px solid #ccc;
@@ -99,24 +101,24 @@ input[type="date"], textarea {
     margin: 20px;
     width: 1150px;
     padding: 1px;
-    
+
 
 }
 
 .boton {
 
-   
+
     background-color: cadetblue;
     padding: 5px;
-    border: none; 
-    color: white; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 
@@ -125,30 +127,30 @@ input[type="date"], textarea {
 
     background-color: cadetblue;
     padding: 5px;
-    border: none; 
-    color: white; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 .botonbuscar {
-  
+
     background-color: rgb(32, 11, 219);
     padding: 5px;
-    border: none; 
-    color: white; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
     margin: 4px 40px 2px 40px;
     cursor: pointer;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 .botonlimpiar {
@@ -156,15 +158,15 @@ input[type="date"], textarea {
 
     background-color: rgb(219, 105, 11);
     padding: 5px;
-    border: none; 
-    color: white; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 .botoneditar {
@@ -172,62 +174,63 @@ input[type="date"], textarea {
 
     background-color: rgb(219, 105, 11);
     padding: 5px;
-    border: none; 
-    color: white; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 .botonborrar {
 
-  
+
     background-color: rgb(219, 11, 11);
     padding: 5px;
-    border: none; 
-    color: white; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
+
 .botonmas {
-   
- 
+
+
     background-color: cadetblue;
     padding: 5px;
-    border: none; 
-    color: white; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
-    margin: 20px ;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px;
     cursor: pointer;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 .botonflecha {
-   
-  
+
+
     background-color: rgb(30, 7, 235);
     padding: 2px;
-    border: none; 
-    color: white; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 15px; 
-    margin: 2px ;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 2px;
     cursor: pointer;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 .divbotonera {
@@ -238,7 +241,6 @@ input[type="date"], textarea {
     margin: 20px;
     width: 720px;
     padding: 10px;
- 
-    
-}
 
+
+}
